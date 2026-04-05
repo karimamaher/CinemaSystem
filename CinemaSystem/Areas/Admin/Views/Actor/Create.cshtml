@@ -1,0 +1,53 @@
+﻿<div class="container">
+    <div class="row mb-3 align-items-center my-4">
+        <div class="col-12">
+            <h2 class="display-6 fw-bold">Create New Actor</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="Name" class="form-label fw-semibold">Name</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter Actor name" name="name" id="Name">
+                        </div>
+                        <!-- Img -->
+                        <div class="mb-3">
+                            <label for="Img" class="form-label fw-semibold">Img</label>
+                            <input type="file" class="form-control form-control-lg" name="Img" id="Img">
+                        </div>
+                        <!-- Movie Name -->
+                        <div class="mb-3">
+                            <label for="MovieName" class="form-label fw-semibold">Movie Name</label>
+                            <select name="MovieId" class="form-select" id="MovieName">
+                                @foreach (var item in ViewBag.Movies)
+                                {
+                                    @if (ViewBag.MovieId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-plus me-2"></i> Add Actor
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

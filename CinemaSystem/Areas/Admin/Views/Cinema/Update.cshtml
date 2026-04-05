@@ -1,0 +1,66 @@
+﻿@model Cinema
+
+<div class="container">
+    <!-- Page Title -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-12">
+            <h2 class="display-6 fw-bold">Update Cinema</h2>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="Name" class="form-label fw-semibold">Name</label>
+                            <input type="text" class="form-control form-control-lg" 
+                                   placeholder="Enter cinema name" 
+                                   name="name" 
+                                   id="Name"
+                                   value="@Model.Name">
+                        </div>
+                        <!-- Logo -->
+                        <div class="mb-3">
+                            <label for="Img" class="form-label fw-semibold">Logo</label>
+                            <input type="file" class="form-control form-control-lg" id="Img" name="Img" onchange="preViewImage(event)">
+                        </div>
+                        <div class="mb-3">
+                            <img id="preview"
+                                 src="~/images/cinemas/@Model.Logo"
+                                 alt="Current Image"
+                                 style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-edit me-2"></i> Update Cinema
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function preViewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

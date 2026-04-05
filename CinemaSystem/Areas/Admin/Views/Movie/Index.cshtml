@@ -1,0 +1,242 @@
+﻿@model MoviesVM
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">All Movies</h2>
+        </div>
+        <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
+            <a href="/Admin/Movie/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+        </div>
+    </div>
+    <!--Filter-->
+    <form method="get" action="/Admin/Movie/Index">
+        <div class="row g-2 mb-3">
+
+            <!-- Name -->
+            <div class="col-md-4">
+                <input type="search"
+                       class="form-control"
+                       placeholder="Movie Name..."
+                       name="Name"
+                       value="@ViewBag.Name" />
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-3">
+                <select name="CategoryId" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <option value="@item.Id"
+                                selected="@(ViewBag.CategoryId == item.Id)">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Cinema -->
+            <div class="col-md-3">
+                <select name="CinemaId" class="form-select">
+                    <option value="">All Cinemas</option>
+                    @foreach (var item in Model.Cinemas)
+                    {
+                        <option value="@item.Id"
+                                selected="@(ViewBag.CinemaId == item.Id)">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Button -->
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-dark">
+                    Search
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+
+            <!-- Header -->
+            <thead class="table-light">
+                <tr>
+                    <th class="fw-semibold">#</th>
+                    <th class="fw-semibold">Name</th>
+                    <th class="fw-semibold">Price</th>
+                    <th class="fw-semibold">Date</th>
+                    <th class="fw-semibold">Category</th>
+                    <th class="fw-semibold">Cinema</th>
+                    <th class="fw-semibold">Actors</th>
+                    <th class="fw-semibold">Status</th>
+                    <th class="fw-semibold">Actions</th>
+                </tr>
+            </thead>
+
+            <!-- Body -->
+            <tbody class="table-group-divider">
+                @foreach (var item in Model.Movies)
+                {
+                    <tr>
+                        <td class="text-muted">@item.Id</td>
+
+                        <td class="fw-semibold">@item.Name</td>
+
+                        <td class="text-success fw-semibold">
+                            @item.Price.ToString("c")
+                        </td>
+
+                        <td class="text-muted">
+                            @item.DateTime.ToShortDateString()
+                        </td>
+
+                        <td>
+                            <span class="badge bg-info-subtle text-dark px-3 py-2">
+                                @item.Category.Name
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary-subtle text-dark px-3 py-2">
+                                @item.Cinema.Name
+                            </span>
+                        </td>
+                 
+                        <td>
+                            @if (item.Actors != null && item.Actors.Any())
+                            {
+                                @foreach (var actor in item.Actors)
+                                {
+                                    <a asp-controller="Actor"
+                                       asp-action="Details"
+                                       asp-route-id="@actor.Id"
+                                       class="badge bg-info text-dark me-1 mb-1 text-decoration-none">
+
+                                        @actor.Name
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Actors</span>
+                            }
+                        </td>
+                 
+
+                        <td>
+                            @if (item.Status)
+                            {
+                                <span class="badge bg-success-subtle text-success px-3 py-2">
+                                    Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger-subtle text-danger px-3 py-2">
+                                    Inactive
+                                </span>
+                            }
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <a href="/Admin/Movie/Update/@item.Id"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <a href="/Admin/Movie/Delete/@item.Id"
+                                   class="btn btn-sm btn-outline-danger btn-delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <!--Pagination-->
+    <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination mb-0">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       href="/Admin/Movie/Index?page=@(Model.CurrentPage - 1)"
+                       title="Previous">
+                        <span class="fas fa-chevron-left"></span>
+                    </a>
+                </li>
+            }
+
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                @if (i == Model.CurrentPage)
+                {
+                    <li class="page-item active"><a class="page-link" href="/Admin/Movie/Index?page=@i">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="/Admin/Movie/Index?page=@i">@i</a></li>
+                }
+            }
+
+            @if (Model.CurrentPage != Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Admin/Movie/Index?page=@(Model.CurrentPage + 1)" title="Next">
+                        <span class="fas fa-chevron-right"></span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".btn-delete");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function (e) {
+                e.preventDefault(); // stop normal navigation
+
+                const url = this.getAttribute("href");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                          title: "Deleted!",
+                          text: "Your file has been deleted.",
+                          icon: "success"
+                        });
+
+                        // Redirect to delete URL
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+

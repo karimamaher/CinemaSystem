@@ -1,0 +1,113 @@
+﻿@model MovieWithSubImgsVM
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Update Movie</h2>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="Name" class="form-label fw-semibold">Name</label>
+                            <input class="form-control form-control-lg" placeholder="Name" name="name" value="@Model.Movie.Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label fw-semibold">Description</label>
+                            <textarea class="form-control form-control-lg" id="Description" name="Description" rows="3">@Model.Movie.Description</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Price" class="form-label fw-semibold">Price</label>
+                            <input class="form-control form-control-lg" placeholder="Price" name="Price" value="@Model.Movie.Price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="DateTime" class="form-label fw-semibold">DateTime</label>
+                            <input class="form-control form-control-lg" placeholder="DateTime" name="DateTime" value="@Model.Movie.DateTime">
+                        </div>
+                        <div class="mb-3">
+                            <label for="CategoryName" class="form-label fw-semibold">Category Name</label>
+                            <select name="CategoryId" class="form-select">
+                                @foreach (var item in Model.Categories)
+                                { @if (ViewBag.CategoryId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    } else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CinemaName" class="form-label fw-semibold">Cinema Name</label>
+                            <select name="CinemaId" class="form-select">
+                                @foreach (var item in Model.Cinemas)
+                                { @if (ViewBag.CinemaId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    } else
+                                    {
+
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Img" class="form-label fw-semibold">Img</label>
+                            <input type="file" class="form-control form-control-lg" id="Img" name="Img" onchange="preViewImage(event)">
+                        </div>
+                        <div class="mb-3">
+                            <img id="preview" src="~/images/movies/@Model.Movie.MainImg" alt="Current Image" style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
+                        </div> <div class="mb-3"> <label for="SubImgs" class="form-label">Sub Imgs</label> <input type="file" class="form-control" id="SubImgs" name="SubImgs" multiple> </div> <div class="mb-3">
+                            @foreach (var item in Model.MovieSubImgs)
+                            {
+                                <img id="preview" src="~/images/movies/SubImgs/@item.SubImg" alt="Current Image" style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <label for="Status" class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select" id="Status">
+                                @if (Model.Movie.Status)
+                                {
+                                    <option value="true" selected>Active</option>
+                                    <option value="false">In Active</option>
+                                }
+                                else
+                                {
+                                    <option value="true">Active</option>
+                                    <option value="false" selected>In Active</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-edit me-2"></i> Update Movie
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function preViewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

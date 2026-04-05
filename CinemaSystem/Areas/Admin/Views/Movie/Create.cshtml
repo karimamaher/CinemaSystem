@@ -1,0 +1,96 @@
+﻿<div class="container">
+    <div class="row mb-3 align-items-center my-4">
+        <div class="col-12">
+            <h2 class="display-6 fw-bold">Create New Movie</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="Name" class="form-label fw-semibold">Name</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter Movie name" name="name" id="Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Description</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="Price" class="form-label">Price</label>
+                            <input class="form-control" placeholder="Price" name="Price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="DateTime" class="form-label">DateTime</label>
+                            <input class="form-control" placeholder="DateTime" name="DateTime">
+                        </div>
+                        <div class="mb-3">
+                            <label for="CategoryName" class="form-label">Category Name</label>
+                            <select name="CategoryId" class="form-select">
+                                @foreach (var item in ViewBag.Categories)
+                                {
+                                    @if (ViewBag.CategoryId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <!-- Movie Cinema Name -->
+                        <div class="col-md-3">
+                            <label for="CinemaName" class="form-label">Cinema Name</label>
+                            <select name="CinemaId" class="form-select">
+                                @foreach (var item in ViewBag.Cinemas)
+                                {
+                                    @if (ViewBag.CinemaId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <!-- MainImg -->
+                        <div class="mb-3">
+                            <label for="Img" class="form-label fw-semibold">MainImg</label>
+                            <input type="file" class="form-control form-control-lg" name="Img" id="Img">
+                        </div>
+                        <!-- SubImgs -->
+                        <div class="mb-3">
+                            <label for="SubImgs" class="form-label fw-semibold">Sub Imgs</label>
+                            <input type="file" class="form-control form-control-lg" name="SubImgs" id="SubImgs"  multiple>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label for="Status" class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select form-select-lg" id="Status">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-plus me-2"></i> Add Movie
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

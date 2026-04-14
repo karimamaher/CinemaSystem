@@ -1,4 +1,5 @@
-﻿<div class="container">
+﻿@model Movie
+<div class="container">
     <div class="row mb-3 align-items-center my-4">
         <div class="col-12">
             <h2 class="display-6 fw-bold">Create New Movie</h2>
@@ -14,20 +15,23 @@
                         <!-- Name -->
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter Movie name" name="name" id="Name">
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter Movie name" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="Description" class="form-label">Description</label>
-                            <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
-
+                            <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="Price" class="form-label">Price</label>
-                            <input class="form-control" placeholder="Price" name="Price">
+                            <input class="form-control" placeholder="Price" asp-for="Price">
+                            <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="DateTime" class="form-label">DateTime</label>
-                            <input class="form-control" placeholder="DateTime" name="DateTime">
+                            <input type="datetime-local" class="form-control" placeholder="DateTime" asp-for="DateTime">
+                            <span asp-validation-for="DateTime" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="CategoryName" class="form-label">Category Name</label>
@@ -44,6 +48,7 @@
                                     }
                                 }
                             </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
                         <!-- Movie Cinema Name -->
                         <div class="col-md-3">
@@ -61,11 +66,13 @@
                                     }
                                 }
                             </select>
+                            <span asp-validation-for="CinemaId" class="text-danger"></span>
                         </div>
                         <!-- MainImg -->
                         <div class="mb-3">
                             <label for="Img" class="form-label fw-semibold">MainImg</label>
                             <input type="file" class="form-control form-control-lg" name="Img" id="Img">
+                   
                         </div>
                         <!-- SubImgs -->
                         <div class="mb-3">
@@ -76,9 +83,17 @@
                         <!-- Status -->
                         <div class="mb-4">
                             <label for="Status" class="form-label fw-semibold">Status</label>
-                            <select name="status" class="form-select form-select-lg" id="Status">
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
+                            <select name="Status" class="form-select form-select-lg" id="Status">
+                                @if (Model.Status)
+                                {
+                                    <option value="true" selected>Active</option>
+                                    <option value="false">In Active</option>
+                                }
+                                else
+                                {
+                                    <option value="true">Active</option>
+                                    <option value="false" selected>In Active</option>
+                                }
                             </select>
                         </div>
 
@@ -94,3 +109,7 @@
     </div>
 </div>
 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

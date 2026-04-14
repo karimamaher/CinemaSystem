@@ -1,21 +1,29 @@
 ﻿using CinemaSystem.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ActorSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
     public class ActorController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        public ActorController()
+        private readonly IRepository<Actor> _repository;
+        private readonly IRepository<Movie> _movieRepository;
+
+        public ActorController(IRepository<Actor> repository, IRepository<Movie> movieRepository)
         {
-            _context = new ApplicationDbContext();
+            _repository = repository;
+            _movieRepository = movieRepository;
         }
-        public IActionResult Index(int page = 1, string? query = null)
+
+        public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
 
-            var Actors = _context.Actors.Include(e => e.Movie).AsQueryable();
+            //var Actors = _context.Actors.Include(e => e.Movie).AsQueryable();
+            var Actors =await _repository.GetAsync(includes:[e =>e.Movie], cancellationToken: cancellationToken);
             //filter
             if (query is not null)
             {
@@ -38,40 +46,55 @@ namespace ActorSystem.Areas.Admin.Controllers
             });
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create( CancellationToken cancellationToken = default)
         {
-            ViewBag.Movies = _context.Movies.AsEnumerable();
-            return View();
+            ViewBag.Movies =await _movieRepository.GetAsync(cancellationToken: cancellationToken);
+            return View(new Actor());
         }
         [HttpPost]
-        public IActionResult Create(Actor Actor , IFormFile Img)
+        public async Task<IActionResult> Create(Actor Actor, IFormFile Img, CancellationToken cancellationToken = default)
         {
+            ModelState.Remove("Img");
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Movies = await _movieRepository.GetAsync(cancellationToken: cancellationToken);
+                return View(Actor);
+            }
+
+
             if (Img is not null && Img.Length > 0)
             {
                 var fileName = CreateFile(Img);
                 Actor.Img = fileName;
             }
-            _context.Actors.Add(Actor);
-            _context.SaveChanges();
+           await _repository.CreateAsync(Actor, cancellationToken);
+          await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Add Actor Successfully";
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            var Actors = _context.Actors.Find(id);
+            // var Actors = _context.Actors.Find(id);
+            var Actors = await _repository.GetOneAsync(e => e.Id == id, cancellationToken: cancellationToken);
             if (Actors is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);
 
-            ViewBag.Movies = _context.Movies.AsEnumerable();
+            ViewBag.Movies = await _movieRepository.GetAsync(cancellationToken: cancellationToken);
             return View(Actors);
         }
 
         [HttpPost]
-        public IActionResult Update(Actor Actor , IFormFile Img)
+        public async Task<IActionResult> Update(Actor Actor, IFormFile Img, CancellationToken cancellationToken = default)
         {
-            var ActorInDB = _context.Actors.AsNoTracking().SingleOrDefault(e => e.Id == Actor    .Id);
+
+
+
+            // var ActorInDB = _context.Actors.AsNoTracking().SingleOrDefault(e => e.Id == Actor.Id);
+            var ActorInDB = await _repository.GetOneAsync(e => e.Id == Actor.Id, tracked: false, cancellationToken: cancellationToken);
             if (ActorInDB is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);
 
@@ -91,14 +114,25 @@ namespace ActorSystem.Areas.Admin.Controllers
             else
                 Actor.Img = ActorInDB.Img;
 
-            _context.Actors.Update(Actor);
-            _context.SaveChanges();
 
+            ModelState.Remove("Img");
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Movies = await _movieRepository.GetAsync(cancellationToken: cancellationToken);
+                return View(Actor);
+            }
+
+
+            _repository.Update(Actor);
+          await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Update Actor Successfully";
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var Actor= _context.Actors.Find(id);
+            // var Actor = _context.Actors.Find(id);
+            var Actor = await _repository.GetOneAsync(e => e.Id == id, cancellationToken: cancellationToken);
             if (Actor is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);
 
@@ -107,17 +141,20 @@ namespace ActorSystem.Areas.Admin.Controllers
             if (oldFilePath is not null && System.IO.File.Exists(oldFilePath))
                 System.IO.File.Delete(oldFilePath);
 
-            _context.Actors.Remove(Actor);
-            _context.SaveChanges();
+            _repository.Delete(Actor);
+          await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Delete Actor Successfully";
 
             return RedirectToAction(nameof(Index));
 
         }
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id, CancellationToken cancellationToken = default)
         {
 
-            var actor = _context.Actors.Include(e=>e.Movie)
-                .FirstOrDefault(e=>e.Id == id);
+            // var actor = _context.Actors.Include(e => e.Movie)
+            //   .FirstOrDefault(e => e.Id == id);
+            var actor =await _repository.GetOneAsync(expression: e => e.Id == id, includes: [e => e.Movie], cancellationToken: cancellationToken);
 
             if (actor is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);

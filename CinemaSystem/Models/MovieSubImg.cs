@@ -1,4 +1,5 @@
 ﻿using Microsoft.Build.Tasks.Deployment.Bootstrapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace CinemaSystem.Models
 {

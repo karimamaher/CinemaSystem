@@ -1,4 +1,7 @@
-﻿namespace CinemaSystem.Services
+﻿using CinemaSystem.Services.IServices;
+using System.Threading.Tasks;
+
+namespace CinemaSystem.Services
 {
     public enum ImageType
     {
@@ -6,9 +9,9 @@
         SubImg,
         ActorImg
     }
-    public class MovieService
+    public class MovieService :IMovieService
     {
-        public string CreateFile(IFormFile Img , ImageType imageType = ImageType.MainImg )
+        public async Task<string> CreateFileAsync(IFormFile Img , ImageType imageType = ImageType.MainImg )
         {
             var fileName = $"{DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")}-{Guid.NewGuid().ToString()}{Path.GetExtension(Img.FileName)}";
 
@@ -28,7 +31,7 @@
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
-                    Img.CopyTo(stream);
+                   await  Img.CopyToAsync(stream);
                 }
             return fileName;
 

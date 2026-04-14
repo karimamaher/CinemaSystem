@@ -1,3 +1,6 @@
+using Microsoft.Build.Tasks.Deployment.Bootstrapper;
+using Microsoft.EntityFrameworkCore;
+
 namespace CinemaSystem
 {
     public class Program
@@ -8,6 +11,22 @@ namespace CinemaSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection")
+                     ?? throw new InvalidOperationException("Connection string"
+                + "'DefaultConnection' not found.");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+             options.UseSqlServer(connectionString));
+
+
+            builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+            builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
+            builder.Services.AddScoped<IRepository<Actor>, Repository<Actor>>();
+            builder.Services.AddScoped<IRepository<Movie>, Repository<Movie>>();
+            builder.Services.AddScoped<IMovieSubImgRepository, MovieSubImgRepository>();
+            builder.Services.AddScoped<IMovieService, MovieService>();
 
             var app = builder.Build();
 

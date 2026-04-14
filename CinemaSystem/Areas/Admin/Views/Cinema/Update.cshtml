@@ -19,15 +19,14 @@
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
                             <input type="text" class="form-control form-control-lg" 
-                                   placeholder="Enter cinema name" 
-                                   name="name" 
-                                   id="Name"
-                                   value="@Model.Name">
+                                   placeholder="Enter cinema name" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <!-- Logo -->
                         <div class="mb-3">
                             <label for="Img" class="form-label fw-semibold">Logo</label>
                             <input type="file" class="form-control form-control-lg" id="Img" name="Img" onchange="preViewImage(event)">
+                            <span asp-validation-for="Logo" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <img id="preview"
@@ -35,6 +34,23 @@
                                  alt="Current Image"
                                  style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
                         </div>
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label for="Status" class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select form-select-lg" id="Status">
+                                @if (Model.Status)
+                                {
+                                    <option value="true" selected>Active</option>
+                                    <option value="false">In Active</option>
+                                }
+                                else
+                                {
+                                    <option value="true">Active</option>
+                                    <option value="false" selected>In Active</option>
+                                }
+                            </select>
+                        </div>
+
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
@@ -64,3 +80,7 @@
         }
     }
 </script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

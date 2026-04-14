@@ -19,15 +19,14 @@
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
                             <input type="text" class="form-control form-control-lg" 
-                                   placeholder="Enter Actor name" 
-                                   name="name" 
-                                   id="Name"
-                                   value="@Model.Name">
+                                   placeholder="Enter Actor name" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <!-- Img -->
                         <div class="mb-3">
                             <label for="Img" class="form-label fw-semibold">Img</label>
                             <input type="file" class="form-control form-control-lg" id="Img" name="Img" onchange="preViewImage(event)">
+                      
                         </div>
                         <div class="mb-3">
                             <img id="preview"
@@ -51,6 +50,7 @@
                                     }
                                 }
                             </select>
+                            <span asp-validation-for="MovieId" class="text-danger"></span>
                         </div>
 
 
@@ -82,3 +82,7 @@
         }
     }
 </script>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial">
+}

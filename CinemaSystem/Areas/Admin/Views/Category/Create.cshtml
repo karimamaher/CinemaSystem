@@ -1,4 +1,5 @@
-﻿<div class="container">
+﻿@model Category
+<div class="container">
     <div class="row mb-3 align-items-center my-4">
         <div class="col-12">
             <h2 class="display-6 fw-bold">Create New Category</h2>
@@ -14,15 +15,24 @@
                         <!-- Name -->
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter category name" name="name" id="Name">
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter category name" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <!-- Status -->
                         <div class="mb-4">
                             <label for="Status" class="form-label fw-semibold">Status</label>
                             <select name="status" class="form-select form-select-lg" id="Status">
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
+                                @if (Model.Status)
+                                {
+                                    <option value="true" selected>Active</option>
+                                    <option value="false">In Active</option>
+                                }
+                                else
+                                {
+                                    <option value="true">Active</option>
+                                    <option value="false" selected>In Active</option>
+                                }
                             </select>
                         </div>
 
@@ -37,3 +47,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

@@ -10,67 +10,70 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Movie.Id" />
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
-                            <input class="form-control form-control-lg" placeholder="Name" name="name" value="@Model.Movie.Name">
+                            <input class="form-control form-control-lg" placeholder="Name" asp-for="Movie.Name">
+                            <span asp-validation-for="Movie.Name" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="Description" class="form-label fw-semibold">Description</label>
-                            <textarea class="form-control form-control-lg" id="Description" name="Description" rows="3">@Model.Movie.Description</textarea>
+                            <textarea class="form-control form-control-lg" asp-for="Movie.Description" rows="3"></textarea>
+                            <span asp-validation-for="Movie.Description" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="Price" class="form-label fw-semibold">Price</label>
-                            <input class="form-control form-control-lg" placeholder="Price" name="Price" value="@Model.Movie.Price">
+                            <input class="form-control form-control-lg" placeholder="Price" asp-for="Movie.Price">
+                            <span asp-validation-for="Movie.Price" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="DateTime" class="form-label fw-semibold">DateTime</label>
-                            <input class="form-control form-control-lg" placeholder="DateTime" name="DateTime" value="@Model.Movie.DateTime">
+                            <input class="form-control form-control-lg" placeholder="DateTime" asp-for="Movie.DateTime">
+                            <span asp-validation-for="Movie.DateTime" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="CategoryName" class="form-label fw-semibold">Category Name</label>
-                            <select name="CategoryId" class="form-select">
+                            <select asp-for="Movie.CategoryId" class="form-select">
                                 @foreach (var item in Model.Categories)
-                                { @if (ViewBag.CategoryId == item.Id)
-                                    {
-                                        <option value="@item.Id" selected>@item.Name</option>
-                                    } else
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
+                                {
+                                    <option value="@item.Id">@item.Name</option>
                                 }
                             </select>
+                            <span asp-validation-for="Movie.CategoryId" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label for="CinemaName" class="form-label fw-semibold">Cinema Name</label>
-                            <select name="CinemaId" class="form-select">
+                            <select  asp-for="Movie.CinemaId"  class="form-select">
                                 @foreach (var item in Model.Cinemas)
-                                { @if (ViewBag.CinemaId == item.Id)
-                                    {
-                                        <option value="@item.Id" selected>@item.Name</option>
-                                    } else
-                                    {
-
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                                {
+                                    <option value="@item.Id">@item.Name</option>                                    
                                 }
                             </select>
+                            <span asp-validation-for="Movie.CinemaId" class="text-danger"></span>
                         </div>
+
+                        <input type="hidden" asp-for="Movie.MainImg" />
+
                         <div class="mb-3">
                             <label for="Img" class="form-label fw-semibold">Img</label>
                             <input type="file" class="form-control form-control-lg" id="Img" name="Img" onchange="preViewImage(event)">
                         </div>
                         <div class="mb-3">
                             <img id="preview" src="~/images/movies/@Model.Movie.MainImg" alt="Current Image" style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
-                        </div> <div class="mb-3"> <label for="SubImgs" class="form-label">Sub Imgs</label> <input type="file" class="form-control" id="SubImgs" name="SubImgs" multiple> </div> <div class="mb-3">
+                        </div> 
+                        <div class="mb-3">
+                            <label for="SubImgs" class="form-label">Sub Imgs</label> 
+                            <input type="file" class="form-control" id="SubImgs" name="SubImgs" multiple>
+                            </div> 
+                            <div class="mb-3">
                             @foreach (var item in Model.MovieSubImgs)
                             {
-                                <img id="preview" src="~/images/movies/SubImgs/@item.SubImg" alt="Current Image" style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
+                                <img  src="~/images/movies/SubImgs/@item.SubImg" alt="Current Image" style="max-width:200px ; border:1px solid #ccc ;padding:5px; border-radius:10px;" />
                             }
                         </div>
                         <div class="mb-3">
                             <label for="Status" class="form-label fw-semibold">Status</label>
-                            <select name="status" class="form-select" id="Status">
+                            <select asp-for="Movie.Status" class=" form-select" >
                                 @if (Model.Movie.Status)
                                 {
                                     <option value="true" selected>Active</option>
@@ -111,3 +114,7 @@
     }
 </script>
 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

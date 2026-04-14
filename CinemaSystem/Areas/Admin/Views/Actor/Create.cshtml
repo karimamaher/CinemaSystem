@@ -1,4 +1,6 @@
-﻿<div class="container">
+﻿@model Actor
+
+<div class="container">
     <div class="row mb-3 align-items-center my-4">
         <div class="col-12">
             <h2 class="display-6 fw-bold">Create New Actor</h2>
@@ -14,12 +16,14 @@
                         <!-- Name -->
                         <div class="mb-3">
                             <label for="Name" class="form-label fw-semibold">Name</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter Actor name" name="name" id="Name">
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter Actor name" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <!-- Img -->
                         <div class="mb-3">
                             <label for="Img" class="form-label fw-semibold">Img</label>
-                            <input type="file" class="form-control form-control-lg" name="Img" id="Img">
+                            <input type="file" class="form-control form-control-lg" id="Img" name="Img">
+                        
                         </div>
                         <!-- Movie Name -->
                         <div class="mb-3">
@@ -51,3 +55,6 @@
     </div>
 </div>
 
+@section Scripts{
+    <partial name="_ValidationScriptsPartial">
+}

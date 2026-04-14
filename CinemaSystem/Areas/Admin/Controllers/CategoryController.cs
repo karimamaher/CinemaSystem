@@ -1,19 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CinemaSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        public CategoryController()
+        private readonly IRepository<Category> _repository;
+        public CategoryController(IRepository<Category> repository)
         {
-            _context = new ApplicationDbContext();
+            _repository = repository;
         }
-        public IActionResult Index(int page = 1, string? query = null)
+        public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
 
-            var categories = _context.Categories.AsQueryable();
+            // var categories = _context.Categories.AsQueryable();
+            var categories =await _repository.GetAsync(cancellationToken: cancellationToken);
             //filter
             if (query is not null)
             {
@@ -36,21 +39,28 @@ namespace CinemaSystem.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new Category());
         }
         [HttpPost]
-        public IActionResult Create(Category category)
+        public async Task<IActionResult> Create(Category category, CancellationToken cancellationToken = default)
         {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            if (!ModelState.IsValid)
+                return View(category);
 
+           // _context.Categories.Add(category);
+           // _context.SaveChanges();
+           await _repository.CreateAsync(category , cancellationToken: cancellationToken);
+           await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Add Category Successfully";
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            var category = _context.Categories.Find(id);
+            //var category = _context.Categories.Find(id);
+            var category =await _repository.GetOneAsync(e => e.Id == id, cancellationToken: cancellationToken);
             if (category is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);
 
@@ -58,21 +68,28 @@ namespace CinemaSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(Category category)
+        public async Task<IActionResult> Update(Category category, CancellationToken cancellationToken = default)
         {
-            _context.Categories.Update(category);
-            _context.SaveChanges();
+            if (!ModelState.IsValid)
+                return View(category);
 
+           _repository.Update(category);
+            await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Update Category Successfully";
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var category = _context.Categories.Find(id);
+            //var category = _context.Categories.Find(id);
+            var category = await _repository.GetOneAsync(e => e.Id == id, cancellationToken: cancellationToken);
             if (category is null)
                 return RedirectToAction(nameof(HomeController.NotFoundPage), SD.HOME_CONTROLLER);
 
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+           _repository.Delete(category);
+            await _repository.CommitAsync(cancellationToken: cancellationToken);
+
+            TempData["success-notification"] = "Delete Category Successfully";
 
             return RedirectToAction(nameof(Index));
 

@@ -8,26 +8,87 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CinemaSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    @RenderSection("Styles", false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CinemaSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
+            <div class="container-fluid px-4">
+
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold text-warning fs-4" asp-area="" asp-controller="Home" asp-action="Index">
+                    🎬 CinemaSystem
+                </a>
+
+                <!-- Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <!-- Menu -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <!-- Left Menu -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light px-3" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light px-3" asp-controller="Movies" asp-action="Index">Movies</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3" asp-controller="Cinemas" asp-action="Index">Cinemas</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3" asp-controller="Actors" asp-action="Index">Actors</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3" asp-controller="Bookings" asp-action="Index">Bookings</a>
+                        </li>
+
                     </ul>
+
+                    <!-- Right side -->
+                    <div class="d-flex align-items-center">
+
+                        <div class="dropdown">
+                            <a href="#"
+                               class="dropdown-toggle d-flex align-items-center text-light fw-semibold ms-3 px-3 py-2 rounded-3"
+                               data-bs-toggle="dropdown"
+                               style="background-color: rgba(255,255,255,0.05); transition: 0.3s;">
+
+                                <i class="fa fa-user-circle me-2 fs-5"></i>
+                                <span>My Dashboard</span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 p-2" style="min-width: 220px;">
+
+                                @if (User is not null && User.Identity.IsAuthenticated)
+                                {
+                                    <a href="#" class="dropdown-item">Notifications</a>
+                                    <a href="#" class="dropdown-item">Account Settings</a>
+                                    <a href="/Identity/Profile" class="dropdown-item">My Account</a>
+                                    <a href="/Identity/Account/Logout" class="dropdown-item text-danger">Log Out</a>
+                                }
+                                else
+                                {
+                                    <a href="/Identity/Account/Login" class="dropdown-item">Login</a>
+                                    <a href="/Identity/Account/Register" class="dropdown-item">Register</a>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
         </nav>
     </header>
@@ -37,14 +98,57 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="bg-dark text-light mt-5 pt-4 border-top">
+
         <div class="container">
-            &copy; 2026 - CinemaSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            <div class="row">
+
+                <!-- About -->
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-warning fw-bold">CinemaSystem</h5>
+                    <p class="small">
+                        Your modern movie booking system. Discover movies, explore cinemas, and book tickets easily.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-warning fw-bold">Quick Links</h5>
+
+                    <ul class="list-unstyled">
+                        <li><a class="text-light text-decoration-none" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a class="text-light text-decoration-none" asp-controller="Movies" asp-action="Index">Movies</a></li>
+                        <li><a class="text-light text-decoration-none" asp-controller="Cinemas" asp-action="Index">Cinemas</a></li>
+                        <li><a class="text-light text-decoration-none" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                    </ul>
+
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-warning fw-bold">Contact</h5>
+
+                    <p class="small mb-1">📧 support@cinemasystem.com</p>
+                    <p class="small">📞 +20 100 000 0000</p>
+                </div>
+
+            </div>
+
+            <hr class="border-secondary" />
+
+            <div class="text-center pb-3 small">
+                © 2026 - CinemaSystem | Made with ❤️ for movie lovers
+            </div>
+
         </div>
+
     </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    @RenderSection("Scripts", false)
 </body>
 </html>

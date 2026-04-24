@@ -1,0 +1,39 @@
+﻿@model ResendEmailConfirmationVM
+
+@{
+    ViewData["Title"] = "ResendEmailConfirmation";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 500px; border-radius:15px;">
+
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Resend Confirmation</h2>
+            <p class="text-muted">Enter your email or username to resend confirmation</p>
+        </div>
+
+        <form asp-action="ResendEmailConfirmation">
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="EmailOrUserName" class="form-label fw-semibold"></label>
+                <input asp-for="EmailOrUserName" class="form-control form-control-lg rounded-pill" placeholder="Enter email or username" />
+                <span asp-validation-for="EmailOrUserName" class="text-danger small"></span>
+            </div>
+
+            <div class="d-grid mt-4">
+                <input type="submit" value="Send Confirmation" class="btn btn-primary btn-lg rounded-pill" />
+            </div>
+        </form>
+
+        <div class="text-center mt-4">
+            <a asp-action="Login" class="text-decoration-none fw-semibold">Back to Login</a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_NotificationPartial">
+}

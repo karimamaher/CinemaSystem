@@ -1,0 +1,97 @@
+﻿@model RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="container-fluid py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-10 col-xl-8">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-header bg-dark text-warning text-center py-3 rounded-top-4">
+                    <h3 class="mb-0">Create Account</h3>
+                </div>
+
+                <div class="card-body p-5">
+
+                    <form asp-action="Register">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control form-control-lg" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control form-control-lg" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="UserName" class="form-label"></label>
+                                <input asp-for="UserName" class="form-control form-control-lg" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control form-control-lg" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control form-control-lg" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ConfirmPassword" class="form-label"></label>
+                                <input asp-for="ConfirmPassword" class="form-control form-control-lg" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label"></label>
+                                <input asp-for="Address" class="form-control form-control-lg" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <input type="submit" value="Register" class="btn btn-warning btn-lg fw-bold" />
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-action="Login" class="text-decoration-none">
+                    Already have an account? Login
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_NotificationPartial">
+}

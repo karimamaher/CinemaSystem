@@ -7,10 +7,10 @@ namespace CinemaSystem.Models
         public int Id { get; set; }
 
         [Required()]
-        [StringLength(10, MinimumLength = 4)]
+        [Length(4, 30)]
         public string Name { get; set; } = string.Empty;
 
-        [StringLength(100)]
+        [MaxLength(300)]
         public string? Description { get; set; }
 
         [DataType(DataType.Currency)]

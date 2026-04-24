@@ -7,18 +7,6 @@ namespace CinemaSystem.Areas.Admin.Controllers
     public class HomeController : Controller
     {
 
-/*        private readonly IRepository<Movie> _movieRepository;
-        private readonly IRepository<Actor> _actorRepository;
-        private readonly IRepository<Category> _categoryRepository;
-        private readonly IRepository<Cinema> _cinemaRepository;
-
-        public HomeController(IRepository<Movie> movieRepository, IRepository<Actor> actorRepository, IRepository<Category> categoryRepository, IRepository<Cinema> cinemaRepository)
-        {
-            _movieRepository = movieRepository;
-            _actorRepository = actorRepository;
-            _categoryRepository = categoryRepository;
-            _cinemaRepository = cinemaRepository;
-        }*/
 
         private readonly ApplicationDbContext _context;
 

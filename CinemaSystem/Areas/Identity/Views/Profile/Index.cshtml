@@ -1,0 +1,159 @@
+﻿@model ProfileUserVM
+<div class="container">
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" style="width: 70%" alt="Maxwell Admin">
+                            </div>
+                            <h5 class="user-name">"@Model.ApplicationUserVM.FirstName @Model.ApplicationUserVM.LastName"</h5>
+                            <h6 class="user-email">@Model.ApplicationUserVM.Email</h6>
+                        </div>
+                        <div class="about">
+                            <h5>About</h5>
+                            <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+
+                <!-- فورم تعديل البيانات -->
+                <form asp-action="Update" method="post">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row gutters">
+                                <div class="col-12">
+                                    <h6 class="mb-2 text-primary">Personal Details</h6>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control"
+                                               name="ApplicationUserVM.FirstName"
+                                               value="@Model.ApplicationUserVM.FirstName">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control"
+                                               name="ApplicationUserVM.LastName"
+                                               value="@Model.ApplicationUserVM.LastName">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control"
+                                               name="ApplicationUserVM.Email"
+                                               value="@Model.ApplicationUserVM.Email">
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>Phone</label>
+                                        <input type="text" class="form-control"
+                                               name="ApplicationUserVM.PhoneNumber"
+                                               value="@Model.ApplicationUserVM.PhoneNumber">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row gutters">
+                                <div class="col-12">
+                                    <h6 class="mt-3 mb-2 text-primary">Address</h6>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control"
+                                               name="ApplicationUserVM.Address"
+                                               value="@Model.ApplicationUserVM.Address">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row gutters mt-3">
+                                <div class="col-12">
+                                    <div class="text-right">
+                                        <input type="reset" value="Cancel" class="btn btn-secondary">
+                                        <input type="submit" value="Update" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+                <!-- فورم تغيير الباسورد -->
+
+                <div class="mt-4">
+                    <form asp-action="ChangeCurrentPassword" method="post">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="row gutters">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title text-primary">Change Password</h4>
+                                        </div>
+
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">Current password</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" class="form-control"
+                                                           name="ChangeCurrentPasswordVM.CurrentPassword"
+                                                           value="@Model.ChangeCurrentPasswordVM.CurrentPassword">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">New password</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" class="form-control"
+                                                           name="ChangeCurrentPasswordVM.NewPassword"
+                                                           value="@Model.ChangeCurrentPasswordVM.NewPassword">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">Confirm password</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" class="form-control"
+                                                           name="ChangeCurrentPasswordVM.ConfirmPassword"
+                                                           value="@Model.ChangeCurrentPasswordVM.ConfirmPassword">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mt-3">
+                                                <div class="col-sm-10 col-sm-offset-2">
+                                                    <input type="submit" value="Save" class="btn btn-primary">
+                                                    <input type="reset" value="Cancel" class="btn btn-secondary">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+@section Scripts {
+            <partial name="_NotificationPartial" />
+}

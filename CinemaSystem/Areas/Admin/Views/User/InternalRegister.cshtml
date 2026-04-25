@@ -1,0 +1,105 @@
+﻿@model InternalRegisterVM
+
+<div class="container my-5">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary">Internal Register</h2>
+            <p class="text-muted">Create new user and assign role</p>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form asp-action="InternalRegister" method="post">
+
+                        <!-- First Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">First Name</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Enter first name">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Last Name</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Enter last name">
+                        </div>
+
+                        <!-- User Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">User Name</label>
+                            <input asp-for="UserName" class="form-control" placeholder="Enter username">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Password</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="Optional address">
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Role</label>
+                            <select asp-for="RoleName" class="form-select">
+                                <option disabled selected>-- Select Role --</option>
+
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role.Name">@role.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="/Admin/User/Index" class="btn btn-outline-secondary">
+                                Back
+                            </a>
+
+                            <button type="submit" class="btn btn-primary px-4">
+                                Create User
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

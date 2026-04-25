@@ -1,3 +1,4 @@
+using CinemaSystem.Utility.DbInitializers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
@@ -31,6 +32,13 @@ namespace CinemaSystem
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            builder.Services.ConfigureApplicationCookie(option =>
+            {
+                option.LoginPath = "/Identity/Account/Login";
+                option.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+            });
+
 
             builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
             builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
@@ -39,6 +47,7 @@ namespace CinemaSystem
             builder.Services.AddScoped<IMovieSubImgRepository, MovieSubImgRepository>();
             builder.Services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
             builder.Services.AddScoped<IMovieService, MovieService>();
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             var app = builder.Build();
@@ -50,6 +59,12 @@ namespace CinemaSystem
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+            var scope = app.Services.CreateScope();
+            var service = scope.ServiceProvider.GetService<IDbInitializer>();
+            service.Initialize();
+
 
             app.UseHttpsRedirection();
             app.UseRouting();

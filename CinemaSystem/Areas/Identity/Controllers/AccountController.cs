@@ -27,6 +27,10 @@ namespace CinemaSystem.Areas.Identity.Controllers
             _applicationUserOTPRepository = applicationUserOTPRepository;
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Logout()
         {
@@ -78,6 +82,8 @@ namespace CinemaSystem.Areas.Identity.Controllers
 
 
             TempData["success-notification"] = "Create Account Successfully , please check your email to verfiy";
+
+            await _userManger.AddToRoleAsync(user, SD.CUSTOMER_ROLE);
 
             return RedirectToAction(nameof(Login));
         }

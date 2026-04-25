@@ -1,4 +1,5 @@
 ﻿using CinemaSystem.Areas.Admin.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 namespace ActorSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE} , {SD.EMPLOYEE_ROLE}")]
     public class ActorController : Controller
     {
         private readonly IRepository<Actor> _repository;
@@ -45,13 +47,17 @@ namespace ActorSystem.Areas.Admin.Controllers
                 CurrentPage = page
             });
         }
+
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Create( CancellationToken cancellationToken = default)
         {
             ViewBag.Movies =await _movieRepository.GetAsync(cancellationToken: cancellationToken);
             return View(new Actor());
         }
+
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Create(Actor Actor, IFormFile Img, CancellationToken cancellationToken = default)
         {
             ModelState.Remove("Img");
@@ -76,6 +82,7 @@ namespace ActorSystem.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             // var Actors = _context.Actors.Find(id);
@@ -88,6 +95,7 @@ namespace ActorSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(Actor Actor, IFormFile Img, CancellationToken cancellationToken = default)
         {
 
@@ -129,6 +137,8 @@ namespace ActorSystem.Areas.Admin.Controllers
             TempData["success-notification"] = "Update Actor Successfully";
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             // var Actor = _context.Actors.Find(id);

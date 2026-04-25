@@ -5,9 +5,12 @@
         <div class="col-md-6">
             <h2 class="display-6">All Movies</h2>
         </div>
-        <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-            <a href="/Admin/Movie/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
-        </div>
+        @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
+        {
+            <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
+                <a href="/Admin/Movie/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+            </div>
+        }
     </div>
     <!--Filter-->
     <form method="get" action="/Admin/Movie/Index">
@@ -106,7 +109,7 @@
                                 @item.Cinema.Name
                             </span>
                         </td>
-                 
+
                         <td>
                             @if (item.Actors != null && item.Actors.Any())
                             {
@@ -126,7 +129,7 @@
                                 <span class="text-muted">No Actors</span>
                             }
                         </td>
-                 
+
 
                         <td>
                             @if (item.Status)
@@ -145,19 +148,26 @@
 
                         <!-- Actions -->
                         <td>
-                            <div class="d-flex justify-content-center gap-2">
+                            @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
+                            {
+                                <div class="d-flex justify-content-center gap-2">
 
-                                <a href="/Admin/Movie/Update/@item.Id"
-                                   class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+                                    <a href="/Admin/Movie/Update/@item.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
 
-                                <a href="/Admin/Movie/Delete/@item.Id"
-                                   class="btn btn-sm btn-outline-danger btn-delete">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                    <a href="/Admin/Movie/Delete/@item.Id"
+                                       class="btn btn-sm btn-outline-danger btn-delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
 
-                            </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <span>NoAction</span>
+                            }
                         </td>
                     </tr>
                 }

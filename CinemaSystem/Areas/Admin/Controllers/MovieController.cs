@@ -1,6 +1,7 @@
 ﻿using CinemaSystem.Areas.Admin.Controllers;
 using CinemaSystem.Models;
 using CinemaSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using static CinemaSystem.ViewModels.MovieFilterVM;
 namespace MovieSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE} , {SD.EMPLOYEE_ROLE}")]
     public class MovieController : Controller
     {
         private readonly IRepository<Movie> _repository;
@@ -73,14 +75,20 @@ namespace MovieSystem.Areas.Admin.Controllers
                 Cinemas = await _cinemaRepository.GetAsync(cancellationToken: cancellationToken),
             });
         }
+
+
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Create( CancellationToken cancellationToken = default)
         {
             ViewBag.Categories = await _categoryRepository.GetAsync(cancellationToken: cancellationToken);
             ViewBag.Cinemas = await _cinemaRepository.GetAsync(cancellationToken: cancellationToken);
             return View(new Movie());
         }
+
+
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Create(Movie movie , IFormFile Img, List<IFormFile>? SubImgs, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid) 
@@ -124,6 +132,7 @@ namespace MovieSystem.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             // var Movie = _context.Movies.Find(id);
@@ -141,6 +150,7 @@ namespace MovieSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(Movie Movie , IFormFile Img, List<IFormFile>? SubImgs, CancellationToken cancellationToken = default)
         {
 
@@ -212,6 +222,8 @@ namespace MovieSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             // var Movie= _context.Movies.Find(id);

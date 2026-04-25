@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CinemaSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE} , {SD.EMPLOYEE_ROLE}")]
     public class CategoryController : Controller
     {
         private readonly IRepository<Category> _repository;
@@ -36,12 +38,18 @@ namespace CinemaSystem.Areas.Admin.Controllers
                 CurrentPage = page
             });
         }
+
+
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public IActionResult Create()
         {
             return View(new Category());
         }
+
+
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Create(Category category, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -57,6 +65,7 @@ namespace CinemaSystem.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             //var category = _context.Categories.Find(id);
@@ -68,6 +77,7 @@ namespace CinemaSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Update(Category category, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -79,6 +89,8 @@ namespace CinemaSystem.Areas.Admin.Controllers
             TempData["success-notification"] = "Update Category Successfully";
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE}, {SD.ADMIN_ROLE}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             //var category = _context.Categories.Find(id);

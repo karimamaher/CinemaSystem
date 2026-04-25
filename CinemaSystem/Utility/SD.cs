@@ -14,5 +14,11 @@
         public const string CINEMA_CONTROLLER = "Cinema";
         public const string MOVIE_CONTROLLER = "Movie";
         public const string ACTOR_CONTROLLER = "Actor";
+
+        //Roles
+        public const string SUPER_ADMIN_ROLE = "SuperAdmin";
+        public const string ADMIN_ROLE = "Admin";
+        public const string EMPLOYEE_ROLE = "Employee";
+        public const string CUSTOMER_ROLE = "Customer";
     }
 }

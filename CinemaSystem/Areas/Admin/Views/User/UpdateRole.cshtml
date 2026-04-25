@@ -1,0 +1,66 @@
+﻿@model UserWithRoleVM
+
+<div class="container my-5">
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-dark">Update User Role</h2>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <form method="post">
+
+                        <!-- User Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">User Name</label>
+                            <input class="form-control" placeholder="Name" asp-for="ApplicationUser.UserName" disabled>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Role</label>
+                            <select name="RoleName" class="form-select">
+                                @foreach (var item in Model.IdentityRoles)
+                                {
+                                    @if (item.Name == Model.RoleName)
+                                    {
+                                        <option value="@item.Name" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="/Admin/User/Index" class="btn btn-outline-secondary">
+                                Back
+                            </a>
+
+                            <button type="submit" class="btn btn-primary px-4">
+                                Save
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

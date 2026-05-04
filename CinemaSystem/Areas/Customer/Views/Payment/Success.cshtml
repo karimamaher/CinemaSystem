@@ -1,0 +1,81 @@
+﻿@model PaymentSuccessVM
+
+<div class="container my-5">
+
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h2 class="text-success fw-bold">✅ Booking Confirmed</h2>
+            <p class="text-muted">Your tickets have been successfully booked</p>
+        </div>
+
+        <!-- Movie Info -->
+        <div class="mb-4">
+            <h4 class="fw-bold">@Model.MovieName</h4>
+
+            <p class="mb-1">
+                🏛 <strong>Hall:</strong> @Model.HallName
+            </p>
+
+            <p class="mb-1">
+                🕒 <strong>Time:</strong>
+                @Model.StartTime.ToString("dddd, dd MMM yyyy - hh:mm tt")
+            </p>
+
+            <p class="mb-1">
+                🎟 <strong>Booking Reference:</strong>
+                <span class="text-primary fw-bold">@Model.BookingReference</span>
+            </p>
+        </div>
+
+        <hr />
+
+        <!-- Seats -->
+        <div class="mb-4">
+            <h5 class="fw-bold">💺 Your Seats</h5>
+
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                @foreach (var seat in Model.Seats)
+                {
+                    <span class="badge bg-dark px-3 py-2">@seat</span>
+                }
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- Payment Summary -->
+        <div class="mb-4">
+            <p class="mb-1">
+                💵 <strong>Total Paid:</strong> @Model.TotalPrice EGP
+            </p>
+
+            <p class="mb-1">
+                📧 Tickets sent to:
+                <strong>@Model.UserEmail</strong>
+            </p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="alert alert-success text-center">
+            🎉 Enjoy your movie! Don’t forget to bring your ticket 🎟️
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-4 d-flex justify-content-between flex-wrap gap-2">
+
+            <a asp-controller="Movies" asp-action="Index"
+               class="btn btn-outline-primary">
+                🎬 Browse Movies
+            </a>
+
+            <a asp-controller="Booking" asp-action="MyBooking"
+               class="btn btn-primary">
+                📄 My Bookings
+            </a>
+
+        </div>
+
+    </div>
+</div>

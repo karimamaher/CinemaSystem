@@ -1,0 +1,67 @@
+﻿@model CinemaSystem.ViewModels.PaymentVM
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<div class="container py-4" style="max-width:560px">
+
+    @* ── معلومات الفيلم ── *@
+    <div class="card rounded-4 shadow-sm mb-3">
+        <div class="card-body d-flex align-items-center gap-3">
+            <span style="font-size:30px">🎬</span>
+            <div>
+                <h6 class="fw-bold mb-0">@Model.MovieName</h6>
+                <small class="text-muted">@Model.HallName &middot; @Model.ShowDateTime.ToString("ddd dd MMM · hh:mm tt")</small>
+            </div>
+        </div>
+    </div>
+
+    @* ── Booking Reference ── *@
+    <div class="card rounded-4 shadow-sm mb-3">
+        <div class="card-body">
+            <p class="text-muted small mb-1">Booking Reference</p>
+            <h5 class="fw-bold mb-0 text-primary">@Model.BookingReference</h5>
+        </div>
+    </div>
+
+    @* ── الكراسي ── *@
+    <div class="card rounded-4 shadow-sm mb-3">
+        <div class="card-body">
+            <p class="text-muted small mb-2">Selected Seats</p>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var seat in Model.SelectedSeats)
+                {
+                    <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary fw-bold fs-6">
+                        @seat
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+
+    @* ── السعر ── *@
+    <div class="card rounded-4 shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Seats (@Model.SelectedSeats.Count)</span>
+                <span>@Model.TotalPrice EGP</span>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between fw-bold fs-5">
+                <span>Total</span>
+                <span class="text-success">@Model.TotalPrice EGP</span>
+            </div>
+        </div>
+    </div>
+
+    @* ── زرار الدفع ── *@
+    <a asp-action="Pay"
+       asp-controller="Payment"
+       asp-area="@SD.CUSTOMER_AREA"
+       asp-route-bookingId="@Model.BookingId"
+       class="btn btn-primary w-100 py-3 fw-bold fs-6 rounded-4">
+        Pay @Model.TotalPrice EGP →
+    </a>
+
+</div>

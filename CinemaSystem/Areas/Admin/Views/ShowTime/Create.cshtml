@@ -1,0 +1,79 @@
+﻿@model ShowTime
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-4">
+        <div class="col-12">
+            <h2 class="display-6 fw-bold">Create New ShowTime</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form method="post">
+
+                        <!-- Price -->
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label">Price</label>
+                            <input asp-for="Price" class="form-control" placeholder="Price">
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <!-- Start Time -->
+                        <div class="mb-3">
+                            <label asp-for="StartTime" class="form-label">Start Time</label>
+                            <input asp-for="StartTime" type="datetime-local" class="form-control">
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+
+                        <!-- End Time -->
+                        <div class="mb-3">
+                            <label asp-for="EndTime" class="form-label">End Time</label>
+                            <input asp-for="EndTime" type="datetime-local" class="form-control">
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                        </div>
+
+                        <!-- Movie -->
+                        <div class="mb-3">
+                            <label asp-for="MovieId" class="form-label fw-semibold">Movie Name</label>
+                            <select asp-for="MovieId" class="form-select">
+                                <option disabled selected>-- Select Movie --</option>
+                                @foreach (var item in ViewBag.Movies)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="MovieId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Hall -->
+                        <div class="mb-3">
+                            <label asp-for="HallId" class="form-label fw-semibold">Hall Name</label>
+                            <select asp-for="HallId" class="form-select">
+                                <option disabled selected>-- Select Hall --</option>
+                                @foreach (var item in ViewBag.Halls)
+                                {
+                                    <option value="@item.HallId">@item.HallName</option>
+                                }
+                            </select>
+                            <span asp-validation-for="HallId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-plus me-2"></i> Add ShowTime
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

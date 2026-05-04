@@ -1,0 +1,95 @@
+﻿@model List<BookingVM>
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">My Bookings</h2>
+        </div>
+
+    </div>
+
+    <!-- Filter Section -->
+    <section class="py-3 filter-bar">
+        <div class="container">
+            <div class="row" style="background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;">
+                <div class="col-12">
+                    <form>
+                        <div class="row">
+                            <!-- Booking Id-->
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" placeholder="bookingId" name="query" value="@ViewBag.Query">
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-dark w-100">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+<div class="container mt-4">
+
+   
+
+    <table class="table table-hover">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Movie</th>
+                <th>Time</th>
+                <th>Seats</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MovieName</td>
+
+                    <td>@item.StartTime.ToString("dd MMM - hh:mm tt")</td>
+
+                    <td>@string.Join(", ", item.Seats)</td>
+
+                    <td>@item.TotalPrice EGP</td>
+
+                    <td>@item.BookingStatus</td>
+
+                    <td>
+
+                        <!-- Details -->
+                        <a asp-action="Details"
+                           asp-route-id="@item.BookingId"
+                           class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+
+                        <!-- Refund -->
+                        @if (item.CanRefund)
+                        {
+                            <a asp-action="Refund"
+                            asp-controller="Payment"
+                                   asp-route-paymentId="@item.PaymentId"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to refund?');">
+                                Refund
+                            </a>
+                        }
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+</div>

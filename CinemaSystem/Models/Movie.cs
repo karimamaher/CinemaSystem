@@ -33,6 +33,8 @@ namespace CinemaSystem.Models
 
         [Required()]
         public int CinemaId { get; set; }
-        public Cinema ? Cinema { get; set; } 
+        public Cinema ? Cinema { get; set; }
+
+        public ICollection<ShowTime>? ShowTimes { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace CinemaSystem
 {
@@ -44,11 +45,20 @@ namespace CinemaSystem
             builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
             builder.Services.AddScoped<IRepository<Actor>, Repository<Actor>>();
             builder.Services.AddScoped<IRepository<Movie>, Repository<Movie>>();
+            builder.Services.AddScoped<IRepository<Seat>, Repository<Seat>>();
+            builder.Services.AddScoped<IRepository<Hall>, Repository<Hall>>();
+            builder.Services.AddScoped<IRepository<ShowTime>, Repository<ShowTime>>();
+            builder.Services.AddScoped<IRepository<Booking>, Repository<Booking>>();
+            builder.Services.AddScoped<IRepository<BookingSeat>, Repository<BookingSeat>>();
+            builder.Services.AddScoped<IRepository<Payment>, Repository<Payment>>();
+            builder.Services.AddScoped<IRepository<Ticket>, Repository<Ticket>>();
             builder.Services.AddScoped<IMovieSubImgRepository, MovieSubImgRepository>();
             builder.Services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
             builder.Services.AddScoped<IMovieService, MovieService>();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 
@@ -74,7 +84,7 @@ namespace CinemaSystem
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
+                pattern: "{area=Customer}/{controller=Movies}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

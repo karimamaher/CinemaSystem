@@ -1,0 +1,322 @@
+﻿@model CinemaSystem.ViewModels.SelectSeatsVM
+
+@{
+    ViewData["Title"] = "Select Seats";
+    double price = Model.Price;
+}
+
+@* ============================================================
+    — checkbox مخفي جوا كل كرسي
+   CSS بيشوف :checked ويغير لون الكرسي تلقائياً
+   الـ form بيبعت IDs المختارة للـ controller
+   ============================================================ *@
+
+<form asp-action="ConfirmSeats" asp-controller="Booking" method="post">
+    <input type="hidden" name="ShowTimeId" value="@Model.ShowTimeId" />
+
+    <div class="container-fluid py-3 px-3 px-md-4">
+
+        @*{{-- Top Bar --}}*@  
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 col-lg-10">
+                <div class="d-flex align-items-center justify-content-between px-4 py-3 rounded-4 bg-white shadow-sm">
+                    <div>
+                        <h2 class="movie-title mb-0">🎬 @Model.MovieName</h2>
+                        <p class="movie-sub mb-0">@Model.HallName &middot; Seat Selection &middot; @price EGP per seat</p>
+                    </div>
+                    <div class="seat-stats">@Model.Seats.Count() Seats</div>
+                </div>
+            </div>
+        </div>
+
+        @*{{-- Screen --}}*@ 
+        <div class="row justify-content-center mb-1">
+            <div class="col-12 col-lg-10 text-center">
+                <div class="screen-bar mx-auto"></div>
+                <div class="screen-beam mx-auto"></div>
+                <div class="screen-label">SCREEN</div>
+            </div>
+        </div>
+
+        @* {{-- Seat Grid --}}*@
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 col-lg-10">
+                <div class="grid-wrapper bg-white rounded-4 shadow-sm p-4">
+                    <div class="seat-grid">
+
+                        @foreach (var rowGroup in Model.Seats.GroupBy(s => s.RowLabel).OrderBy(g => g.Key))
+                        {
+                            <div class="seat-row">
+                                <span class="row-label">@rowGroup.Key</span>
+
+                                @foreach (var seat in rowGroup.OrderBy(s => s.SeatNumber))
+                                {
+                                    bool isBooked = Model.BookedSeatIds.Contains(seat.SeatId);
+
+                    
+                                    if (isBooked)
+                                    {
+                                        <div class="seat-wrap booked" title="@seat.Label — Booked">
+                                            @Html.Raw(ChairSvg("bk"))
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @* ── كرسي متاح: label يحتوي checkbox مخفي ── *@
+                                        @* لما المستخدم يضغط: CSS يشوف :checked ويحول الكرسي لبرتقالي *@
+                                        <label class="seat-wrap available" title="@seat.Label — @price EGP">
+                                            <input type="checkbox"
+                                                   name="SelectedSeatIds"
+                                                   value="@seat.SeatId"
+                                                   class="seat-checkbox" />
+                                            @* الكرسي الأزرق (المتاح) *@
+                                            <span class="chair-av">@Html.Raw(ChairSvg("av"))</span>
+                                            @* الكرسي البرتقالي (المختار) *@
+                                            <span class="chair-sel">@Html.Raw(ChairSvg("sel"))</span>
+                                        </label>
+                                    }
+                                }
+                            </div>
+                        }
+
+                    </div>
+
+                    @*{{-- Legend --}}*@  
+                    <div class="d-flex gap-4 justify-content-center mt-4 flex-wrap">
+                        <div class="d-flex align-items-center gap-2 legend-item">
+                            @Html.Raw(ChairSvg("av")) <span>Available</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 legend-item">
+                            @Html.Raw(ChairSvg("sel")) <span>Selected</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 legend-item">
+                            @Html.Raw(ChairSvg("bk")) <span>Booked</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*{{-- Summary + زرار Submit --}}*@  
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="bg-white rounded-4 shadow-sm px-4 py-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div>
+                        <label class="sum-label">Total per seat</label>
+                        <span class="sum-value text-success">@price EGP</span>
+                    </div>
+                
+                    <button type="submit" class="btn-proceed">
+                        Proceed to Payment →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Styles {
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap');
+
+        body {
+            background: #cfd6e3;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* ── Top bar ── */
+        .movie-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1d26;
+        }
+
+        .movie-sub {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .seat-stats {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* ── Screen ── */
+        .screen-bar {
+            height: 7px;
+            max-width: 680px;
+            background: linear-gradient(90deg,#c8d8f0,#4a80d4 30%,#90b8f8 50%,#4a80d4 70%,#c8d8f0);
+            border-radius: 4px;
+            box-shadow: 0 0 18px rgba(74,128,212,.4);
+        }
+
+        .screen-beam {
+            height: 36px;
+            max-width: 640px;
+            background: linear-gradient(to bottom, rgba(74,128,212,.16), transparent);
+        }
+
+        .screen-label {
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: #9ca3af;
+            text-transform: uppercase;
+        }
+
+        /* ── Grid ── */
+        .seat-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .seat-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .row-label {
+            width: 16px;
+            font-size: 10px;
+            color: #9ca3af;
+            font-weight: 700;
+            margin-right: 5px;
+            flex-shrink: 0;
+            font-family: 'Syne', sans-serif;
+            padding-bottom: 6px;
+        }
+
+        /* ── Seat wrap — مشترك بين المتاح والمحجوز ── */
+        .seat-wrap {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform .15s;
+        }
+
+            .seat-wrap.booked {
+                cursor: not-allowed;
+            }
+
+            .seat-wrap.available:hover {
+                transform: translateY(-5px) scale(1.1);
+            }
+
+            .seat-wrap.available:active {
+                transform: scale(.93);
+            }
+
+        /* ── الـ checkbox مخفي تماماً ── */
+        .seat-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* ── الكرسي الأزرق يظهر افتراضياً ── */
+        .chair-av {
+            display: inline-block;
+        }
+
+        .chair-sel {
+            display: none;
+        }
+
+        /* ── لما الـ checkbox يتعلّم (checked): أخفي الأزرق وأظهر البرتقالي ── */
+        .seat-checkbox:checked ~ .chair-av {
+            display: none;
+        }
+
+        .seat-checkbox:checked ~ .chair-sel {
+            display: inline-block;
+        }
+
+        /* ── Legend ── */
+        .legend-item {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+            .legend-item svg {
+                width: 28px;
+                height: 32px;
+            }
+
+        /* ── Summary ── */
+        .sum-label {
+            font-size: 10px;
+            color: #9ca3af;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .sum-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .btn-proceed {
+            background: #2c5fba;
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 22px;
+            font-family: 'Syne', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+            .btn-proceed:hover {
+                background: #1e4a99;
+            }
+
+        @@media (max-width: 600px) {
+            .seat-wrap svg {
+                width: 44px !important;
+                height: 50px !important;
+            }
+
+            .seat-row {
+                gap: 3px;
+            }
+        }
+    </style>
+}
+
+@functions {
+    string ChairSvg(string color)
+    {
+        var P = new Dictionary<string, (string back, string backTop, string stroke, string seat, string arm, string leg, string shine)>
+        {
+            ["av"] = ("#7ba3d8", "#a8c8f0", "#4a72b0", "#6a90c8", "#507ab0", "#3a60a0", "rgba(255,255,255,0.25)"),
+            ["sel"] = ("#c87c18", "#e8a030", "#905810", "#b06c14", "#885010", "#704010", "rgba(255,220,100,0.3)"),
+            ["bk"] = ("#8c2222", "#b03030", "#6a1818", "#7a1c1c", "#5e1414", "#4a1010", "rgba(255,100,100,0.15)"),
+        };
+        var c = P[color];
+        return $@"<svg viewBox=""0 0 64 72"" width=""64"" height=""72"" xmlns=""http://www.w3.org/2000/svg"">
+          <path d=""M10,38 L10,14 Q10,4 32,4 Q54,4 54,14 L54,38 Q54,42 32,42 Q10,42 10,38 Z"" fill=""{c.back}"" stroke=""{c.stroke}"" stroke-width=""1.3""/>
+          <path d=""M14,7 Q14,5 32,5 Q50,5 50,7 L50,18 Q50,21 32,21 Q14,21 14,18 Z"" fill=""{c.backTop}"" opacity=""0.9""/>
+          <line x1=""10"" y1=""32"" x2=""54"" y2=""32"" stroke=""{c.stroke}"" stroke-width=""0.8"" opacity=""0.4""/>
+          <path d=""M16,8 Q16,6 32,6 Q44,6 44,8 L44,14 Q44,16 32,16 Q16,16 16,14 Z"" fill=""{c.shine}""/>
+          <path d=""M2,30 Q2,26 8,26 L8,56 Q8,60 4,60 Q2,60 2,58 Z"" fill=""{c.arm}"" stroke=""{c.stroke}"" stroke-width=""1""/>
+          <path d=""M62,30 Q62,26 56,26 L56,56 Q56,60 60,60 Q62,60 62,58 Z"" fill=""{c.arm}"" stroke=""{c.stroke}"" stroke-width=""1""/>
+          <path d=""M8,41 Q8,38 32,38 Q56,38 56,41 L56,55 Q56,59 32,59 Q8,59 8,55 Z"" fill=""{c.seat}"" stroke=""{c.stroke}"" stroke-width=""1.2""/>
+          <path d=""M10,40 Q10,38 32,38 Q54,38 54,40 L54,45 Q54,47 32,47 Q10,47 10,45 Z"" fill=""{c.shine}""/>
+          <path d=""M9,55 Q9,60 32,60 Q55,60 55,55 L55,58 Q55,63 32,63 Q9,63 9,58 Z"" fill=""{c.arm}"" stroke=""{c.stroke}"" stroke-width=""1""/>
+          <rect x=""13"" y=""62"" width=""9"" height=""7"" rx=""2.5"" fill=""{c.leg}""/>
+          <rect x=""42"" y=""62"" width=""9"" height=""7"" rx=""2.5"" fill=""{c.leg}""/>
+        </svg>";
+    }
+}

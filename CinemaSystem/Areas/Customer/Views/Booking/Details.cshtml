@@ -1,0 +1,36 @@
+﻿@model BookingDetailsVM
+
+<div class="container mt-4">
+
+    <h2>🎟 Booking Details</h2>
+
+    <div class="card mt-3 p-3 shadow-sm">
+
+        <h4>@Model.MovieName</h4>
+
+        <hr />
+
+        <p><strong>Reference:</strong> @Model.BookingReference</p>
+
+        <p><strong>Hall:</strong> @Model.HallName</p>
+
+        <p><strong>Time:</strong> @Model.StartTime.ToString("dd MMM yyyy - hh:mm tt")</p>
+
+        <p><strong>Seats:</strong> @string.Join(", ", Model.Seats)</p>
+
+        <p><strong>Total Price:</strong> @Model.TotalPrice EGP</p>
+
+        <p><strong>Booking Status:</strong> @Model.BookingStatus</p>
+
+        <p><strong>Payment Status:</strong> @Model.PaymentStatus</p>
+
+        <hr />
+
+       
+        <a asp-action="MyBooking" class="btn btn-secondary">
+            ⬅ Back
+        </a>
+
+    </div>
+
+</div>
